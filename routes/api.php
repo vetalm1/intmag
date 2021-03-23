@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +18,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+
+Route::middleware('auth:sanctum')
+    ->get('/user', function (Request $request) {
+        return $request->user();
+    })
+    ->name('api.user');
+
+Route::name('api.')
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::apiResource('carts', CartController::class);
+
+        Route::apiResource('products', ProductController::class);
+
+        Route::apiResource('categories', CategoryController::class);
+    });
