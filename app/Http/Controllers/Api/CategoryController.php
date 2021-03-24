@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Category;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Http\Response;
+use function MongoDB\BSON\toJSON;
 
 class CategoryController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
@@ -29,9 +33,37 @@ class CategoryController extends Controller
         return new CategoryCollection($categories);
     }
 
+    public function tree()
+    {
+        $categories = Category::all()->toArray();
+
+
+        return $this->makeTree($categories);
+        //return new CategoryCollection($categories);
+    }
+
+
+    public function makeTree($arr, $parent_id=0, $tree=[])
+    {
+        foreach ($arr as $item){
+            if ($item['parent_id'] ===$parent_id) {
+
+                $child = $this->makeTree($arr, $item['id']);
+
+                $tree[$item['id']] = [$item];
+
+                !empty($child)
+                    ? $tree[$item['id']][] = $child
+                    : '';
+            }
+        }
+        return $tree;
+    }
+
     /**
-     * @param \App\Http\Requests\CategoryStoreRequest $request
-     * @return \Illuminate\Http\Response
+     * @param CategoryStoreRequest $request
+     * @return CategoryResource
+     * @throws AuthorizationException
      */
     public function store(CategoryStoreRequest $request)
     {
@@ -45,9 +77,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Request $request, Category $category)
     {
@@ -59,7 +91,7 @@ class CategoryController extends Controller
     /**
      * @param \App\Http\Requests\CategoryUpdateRequest $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(CategoryUpdateRequest $request, Category $category)
     {
@@ -73,9 +105,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Request $request, Category $category)
     {

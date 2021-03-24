@@ -21,10 +21,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('login', function () {
+    return view('welcome');})->name('login');
 
 Route::prefix('/')
-    ->middleware('auth')
+    //->middleware('auth')
     ->group(function () {
         Route::resource('carts', CartController::class);
         Route::resource('products', ProductController::class);

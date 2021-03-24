@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
@@ -27,8 +30,8 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function create(Request $request)
     {
@@ -39,7 +42,7 @@ class CategoryController extends Controller
 
     /**
      * @param \App\Http\Requests\CategoryStoreRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(CategoryStoreRequest $request)
     {
@@ -55,9 +58,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Request $request, Category $category)
     {
@@ -67,9 +70,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Request $request, Category $category)
     {
@@ -81,7 +84,7 @@ class CategoryController extends Controller
     /**
      * @param \App\Http\Requests\CategoryUpdateRequest $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(CategoryUpdateRequest $request, Category $category)
     {
@@ -97,9 +100,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Request $request, Category $category)
     {

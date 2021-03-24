@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CartStoreRequest;
 use App\Http\Requests\CartUpdateRequest;
+use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
@@ -27,8 +30,8 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function create(Request $request)
     {
@@ -39,7 +42,7 @@ class CartController extends Controller
 
     /**
      * @param \App\Http\Requests\CartStoreRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(CartStoreRequest $request)
     {
@@ -55,9 +58,9 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Request $request, Cart $cart)
     {
@@ -67,9 +70,9 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Request $request, Cart $cart)
     {
@@ -81,7 +84,7 @@ class CartController extends Controller
     /**
      * @param \App\Http\Requests\CartUpdateRequest $request
      * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(CartUpdateRequest $request, Cart $cart)
     {
@@ -97,9 +100,9 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Request $request, Cart $cart)
     {

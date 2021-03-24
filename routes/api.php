@@ -34,4 +34,6 @@ Route::name('api.')
         Route::apiResource('products', ProductController::class);
 
         Route::apiResource('categories', CategoryController::class);
+
+        Route::get('tree', [CategoryController::class, 'tree'])->name('tree');
     });

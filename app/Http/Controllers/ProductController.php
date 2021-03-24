@@ -12,6 +12,7 @@ class ProductController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Request $request)
     {
@@ -29,6 +30,7 @@ class ProductController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Request $request)
     {
@@ -40,6 +42,7 @@ class ProductController extends Controller
     /**
      * @param \App\Http\Requests\ProductStoreRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(ProductStoreRequest $request)
     {
