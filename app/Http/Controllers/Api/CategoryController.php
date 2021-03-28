@@ -16,7 +16,7 @@ class CategoryController extends Controller
 {
     /**
      * @param Request $request
-     * @return Response
+     * @return CategoryCollection
      * @throws AuthorizationException
      */
     public function index(Request $request)
@@ -36,16 +36,15 @@ class CategoryController extends Controller
     {
         $categories = Category::all()->toArray();
 
-
         return $this->makeTree($categories);
         //return new CategoryCollection($categories);
     }
 
 
-    public function makeTree($arr, $parent_id=0, $tree=[])
+    public function makeTree($arr, $parent_id = 0, $tree = [])
     {
-        foreach ($arr as $item){
-            if ($item['parent_id'] ===$parent_id) {
+        foreach ($arr as $item) {
+            if ($item['parent_id'] === $parent_id) {
 
                 $child = $this->makeTree($arr, $item['id']);
 

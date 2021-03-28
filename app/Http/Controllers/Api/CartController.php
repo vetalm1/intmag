@@ -3,18 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cart;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Resources\CartResource;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartCollection;
 use App\Http\Requests\CartStoreRequest;
 use App\Http\Requests\CartUpdateRequest;
+use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return CartCollection
+     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
@@ -30,14 +33,16 @@ class CartController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\CartStoreRequest $request
-     * @return \Illuminate\Http\Response
+     * @param CartStoreRequest $request
+     * @return CartResource
+     * @throws AuthorizationException
      */
     public function store(CartStoreRequest $request)
     {
         $this->authorize('create', Cart::class);
 
-        $validated = $request->validated();
+        $validated = $request->getFormData();
+        $validated['identifier'] =  $request->cookie('cart_identifier');
 
         $cart = Cart::create($validated);
 
@@ -45,21 +50,27 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Cart $cart
+     * @return CartResource
+     * @throws AuthorizationException
      */
     public function show(Request $request, Cart $cart)
     {
         $this->authorize('view', $cart);
 
-        return new CartResource($cart);
+       $cart_identifier = $request->cookie('cart_identifier');
+
+        $userCart = Cart::where('identifier', $cart_identifier)->get();
+
+        return new CartResource($userCart);
     }
 
     /**
-     * @param \App\Http\Requests\CartUpdateRequest $request
-     * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @param CartUpdateRequest $request
+     * @param Cart $cart
+     * @return CartResource
+     * @throws AuthorizationException
      */
     public function update(CartUpdateRequest $request, Cart $cart)
     {
@@ -73,9 +84,10 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Cart $cart
+     * @return Response
+     * @throws AuthorizationException
      */
     public function destroy(Request $request, Cart $cart)
     {

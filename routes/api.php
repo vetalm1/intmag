@@ -7,16 +7,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 
@@ -27,7 +17,7 @@ Route::middleware('auth:sanctum')
     ->name('api.user');
 
 Route::name('api.')
-    ->middleware('auth:sanctum')
+    ->middleware(['auth:sanctum', 'cookie'])
     ->group(function () {
         Route::apiResource('carts', CartController::class);
 
@@ -41,6 +31,7 @@ Route::name('api.')
     });
 
 Route::name('api.')
+    ->middleware(['cookie'])
     ->group(function () {
 
         Route::post('products/search', [ProductController::class, 'search'])->name('products-search');

@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CartStoreRequest extends FormRequest
 {
@@ -24,12 +27,24 @@ class CartStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['nullable', 'max:255'],
-            'identifier' => ['required', 'max:255', 'string'],
+            //'user_id' => ['nullable', 'max:255'],
+            //'identifier' => ['required', 'max:255', 'string'],
             'product_id' => ['required', 'max:255'],
-            'name' => ['required', 'max:255', 'string'],
+            //'name' => ['required', 'max:255', 'string'],
             'price' => ['required', 'numeric'],
             'quantity' => ['required', 'numeric'],
         ];
     }
+
+    public function getFormData()
+    {
+        $data = $this->request->all();
+
+        $data['user_id'] = Auth::id();
+        $data['name'] =  Product::find($data['product_id'])->name;
+
+
+        return $data;
+    }
+
 }

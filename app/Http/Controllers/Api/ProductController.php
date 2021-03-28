@@ -36,31 +36,27 @@ class ProductController extends Controller
 
     public function search(ProductSearchRequest $request)
     {
-
         $validatedRequest = $request->validated();
 
-        $findCategoryIds = Category::where('name', 'like', '%'.$validatedRequest['category'].'%')
+        $findCategoryIds = Category::where('name', 'like', '%' . $validatedRequest['category'] . '%')
             ->select('id')
             ->get()
             ->toArray();
 
-        $findCategoryIds = array_map(function ($n){return $n['id'];}, $findCategoryIds);
+        $findCategoryIds = array_map(function ($n) {
+            return $n['id'];
+        }, $findCategoryIds);
 
         $results = Product::query();
-        !($validatedRequest['category'])?
-            :$results->whereIn('cateory_id', $findCategoryIds);
+        !($validatedRequest['category']) ?: $results->whereIn('cateory_id', $findCategoryIds);
 
-        !($validatedRequest['name'])?
-            :$results->where('name', 'like', '%'.$validatedRequest['name'].'%');
+        !($validatedRequest['name']) ?: $results->where('name', 'like', '%' . $validatedRequest['name'] . '%');
 
-        !($validatedRequest['price'])?
-            :$results->where('price', '>' , $validatedRequest['price']);
+        !($validatedRequest['price']) ?: $results->where('price', '>', $validatedRequest['price']);
 
-        !($validatedRequest['size'])?
-            :$results->where('size', '>' , $validatedRequest['size']);
+        !($validatedRequest['size']) ?: $results->where('size', '>', $validatedRequest['size']);
 
-        !($validatedRequest['weight'])? :
-            $results->where('weight', '>' , $validatedRequest['weight']);
+        !($validatedRequest['weight']) ?: $results->where('weight', '>', $validatedRequest['weight']);
 
         return $results->get();
     }
@@ -124,6 +120,7 @@ class ProductController extends Controller
      * @param Request $request
      * @param Product $product
      * @return Response
+     * @throws AuthorizationException
      */
     public function destroy(Request $request, Product $product)
     {
