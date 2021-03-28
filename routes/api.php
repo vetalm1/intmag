@@ -35,5 +35,14 @@ Route::name('api.')
 
         Route::apiResource('categories', CategoryController::class);
 
-        Route::get('tree', [CategoryController::class, 'tree'])->name('tree');
+        Route::get('products/slug/{slug}', [ProductController::class, 'slugShow'])->name('products-slug-get');
+
+        Route::get('tree', [CategoryController::class, 'tree'])->name('category-tree');
+    });
+
+Route::name('api.')
+    ->group(function () {
+
+        Route::post('products/search', [ProductController::class, 'search'])->name('products-search');
+
     });

@@ -22,7 +22,7 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->text(15);
+        $name = $this->faker->text(8);
         return [
             'cateory_id' => $this->faker->numberBetween(3, 10),
             'name' => $name,

@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class ProductStoreRequest extends FormRequest
+class ProductSearchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
      * @return bool
      */
     public function authorize()
@@ -20,19 +19,16 @@ class ProductStoreRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
      * @return array
      */
     public function rules()
     {
         return [
-            'cateory_id' => ['required', 'max:255'],
-            'name' => ['required', 'max:15', 'string'],
-            'slug' => ['required', 'max:20', 'string'],
-            'description' => ['required', 'max:255', 'string'],
-            'price' => ['required', 'numeric'],
-            'size' => ['required', 'numeric'],
-            'weight' => ['required', 'numeric'],
+            'category' => ['max:15', 'nullable' ,'string'],
+            'name' => ['max:15', 'nullable', 'string'],
+            'price' => ['nullable'],
+            'size' => ['nullable'],
+            'weight' => ['nullable'],
         ];
     }
 

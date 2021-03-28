@@ -15,12 +15,6 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-
-        DB::table('categories')->insert([
-            'name' => 'main',
-            'parent_id' => null,
-        ]);
-
         DB::table('categories')->insert([
             'name' => 'FirstCategory',
             'parent_id' => 0,

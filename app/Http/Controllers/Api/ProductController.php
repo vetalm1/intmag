@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\ProductSearchRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -32,6 +34,37 @@ class ProductController extends Controller
         return new ProductCollection($products);
     }
 
+    public function search(ProductSearchRequest $request)
+    {
+
+        $validatedRequest = $request->validated();
+
+        $findCategoryIds = Category::where('name', 'like', '%'.$validatedRequest['category'].'%')
+            ->select('id')
+            ->get()
+            ->toArray();
+
+        $findCategoryIds = array_map(function ($n){return $n['id'];}, $findCategoryIds);
+
+        $results = Product::query();
+        !($validatedRequest['category'])?
+            :$results->whereIn('cateory_id', $findCategoryIds);
+
+        !($validatedRequest['name'])?
+            :$results->where('name', 'like', '%'.$validatedRequest['name'].'%');
+
+        !($validatedRequest['price'])?
+            :$results->where('price', '>' , $validatedRequest['price']);
+
+        !($validatedRequest['size'])?
+            :$results->where('size', '>' , $validatedRequest['size']);
+
+        !($validatedRequest['weight'])? :
+            $results->where('weight', '>' , $validatedRequest['weight']);
+
+        return $results->get();
+    }
+
     /**
      * @param ProductStoreRequest $request
      * @return ProductResource
@@ -57,6 +90,15 @@ class ProductController extends Controller
     public function show(Request $request, Product $product)
     {
         $this->authorize('view', $product);
+
+        return new ProductResource($product);
+    }
+
+    public function slugShow(Request $request, $slug)
+    {
+        $this->authorize('slug-view', Product::class);
+
+        $product = Product::whereSlug($slug)->firstOrFail();
 
         return new ProductResource($product);
     }

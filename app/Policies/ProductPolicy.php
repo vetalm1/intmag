@@ -33,6 +33,11 @@ class ProductPolicy
         return true;
     }
 
+    public function slugView(User $user)
+    {
+        return true;
+    }
+
     /**
      * Determine whether the product can create models.
      *

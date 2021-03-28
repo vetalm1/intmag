@@ -11,7 +11,6 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use Illuminate\Http\Response;
-use function MongoDB\BSON\toJSON;
 
 class CategoryController extends Controller
 {
@@ -80,6 +79,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @param \App\Models\Category $category
      * @return Response
+     * @throws AuthorizationException
      */
     public function show(Request $request, Category $category)
     {
@@ -92,6 +92,7 @@ class CategoryController extends Controller
      * @param \App\Http\Requests\CategoryUpdateRequest $request
      * @param \App\Models\Category $category
      * @return Response
+     * @throws AuthorizationException
      */
     public function update(CategoryUpdateRequest $request, Category $category)
     {
@@ -108,6 +109,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @param \App\Models\Category $category
      * @return Response
+     * @throws AuthorizationException
      */
     public function destroy(Request $request, Category $category)
     {
